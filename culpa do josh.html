@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Bichinho Virtual</title>
+    <style>
+      body {
+        font-family: Arial;
+        background: #f0f0f0;
+        text-align: center;
+      }
+
+      .caixa {
+        background: rgb(162, 215, 246);
+        width: 350px;
+        margin: 30px auto;
+        padding: 20px;
+        border: 2px solid #333;
+        border-radius: 10px;
+      }
+
+      .barra {
+        border-radius: 15px;
+        background: #ddd;
+        height: 18px;
+        width: 100%;
+        margin: 5px 0;
+      }
+
+      .preenchida {
+        border-radius: 15px;
+        height: 18px;
+      }
+
+      .fome-preenchida {
+        background: red;
+      }
+      .felicidade-preenchida {
+        background: green;
+      }
+
+      .cansaco-preenchida {
+        background: orange;
+      }
+
+      button {
+        border-radius: 15px;
+        padding: 8px 12px;
+        margin: 5px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="caixa">
+      <h2>Bichinho Virtual</h2>
+      <p id="emoji">🐶</p>
+      <p>Idade: <span id="idade">0</span>/50</p>
+      <p>Fome: <span id="fomeTexto">0</span></p>
+      <div class="barra">
+        <div
+          class="preenchida fome-preenchida"
+          id="fomeBarra"
+          style="width: 0%"
+        ></div>
+      </div>
+      <p>Felicidade: <span id="felTexto">50</span></p>
+      <div class="barra">
+        <div
+          class="preenchida felicidade-preenchida"
+          id="felBarra"
+          style="width: 50%"
+        ></div>
+      </div>
+      <p>Cansaço: <span id="canTexto">0</span></p>
+      <div class="barra">
+        <div
+          class="preenchida cansaco-preenchida"
+          id="canBarra"
+          style="width: 0%"
+        ></div>
+      </div>
+      <br />
+      <button onclick="alimentar()">Alimentar</button>
+      <button onclick="brincar()">Brincar</button>
+      <button onclick="descansar()">Descansar</button>
+      <p id="mensagem"></p>
+    </div>
+
+    <script>
+      var fome = 0;
+      var felicidade = 50;
+      var cansaco = 0;
+      var idade = 0;
+      var fimDeJogo = false;
+
+      function alimentar() {
+        if (fimDeJogo) return;
+        fome = fome - 20;
+        if (fome < 0) fome = 0;
+        document.getElementById("mensagem").innerHTML = "O pet comeu!";
+        passarTempo();
+        checarFim();
+        atualizarTela();
+      }
+
+      function brincar() {
+        if (fimDeJogo) return;
+        felicidade = felicidade + 15;
+        if (felicidade > 100) felicidade = 100;
+        cansaco = cansaco + 10;
+        if (cansaco > 100) cansaco = 100;
+        document.getElementById("mensagem").innerHTML = "O pet brincou!";
+        passarTempo();
+        checarFim();
+        atualizarTela();
+      }
+
+      function descansar() {
+        if (fimDeJogo) return;
+        cansaco = cansaco - 30;
+        if (cansaco < 0) cansaco = 0;
+        document.getElementById("mensagem").innerHTML = "O pet descansou.";
+        passarTempo();
+        checarFim();
+        atualizarTela();
+      }
+
+      function passarTempo() {
+        fome = fome + 3;
+        felicidade = felicidade - 3;
+        cansaco = cansaco + 10;
+        idade = idade + 1;
+        if (fome > 100) fome = 100;
+        if (felicidade < 0) felicidade = 0;
+        if (cansaco > 100) cansaco = 100;
+      }
+
+      function checarFim() {
+        if (idade >= 50) {
+          document.getElementById("mensagem").innerHTML =
+            "Parabens! Voce venceu!";
+          fimDeJogo = true;
+          return;
+        }
+        if (fome >= 100) {
+          document.getElementById("mensagem").innerHTML =
+            "O pet morreu de fome. Fim de jogo.";
+          fimDeJogo = true;
+        }
+        if (cansaco >= 100) {
+          document.getElementById("mensagem").innerHTML =
+            "O pet morreu de cansaco. Fim de jogo.";
+          fimDeJogo = true;
+        }
+        if (felicidade <= 0) {
+          document.getElementById("mensagem").innerHTML =
+            "O pet morreu de tristeza. Fim de jogo.";
+          fimDeJogo = true;
+        }
+      }
+
+      function atualizarTela() {
+        document.getElementById("fomeTexto").innerHTML = fome;
+        document.getElementById("fomeBarra").style.width = fome + "%";
+        document.getElementById("felTexto").innerHTML = felicidade;
+        document.getElementById("felBarra").style.width = felicidade + "%";
+        document.getElementById("canTexto").innerHTML = cansaco;
+        document.getElementById("canBarra").style.width = cansaco + "%";
+        document.getElementById("idade").innerHTML = idade;
+
+        var emote = "🐶";
+        if (fome > 70) emote = "😫";
+        if (felicidade < 20) emote = "😢";
+        if (cansaco > 70) emote = "🥱";
+        document.getElementById("emoji").innerHTML = emote;
+      }
+
+      atualizarTela();
+    </script>
+  </body>
+</html>
